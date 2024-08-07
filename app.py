@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import json
+import os.path
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.secret_key = 'jkdshfjkasdfhsadkmad;lsam' #allows information to be securely passed to the html
 
 # the app is not much unless it displays some information on the webpage
 # To do that, we need to create a route
@@ -15,11 +18,32 @@ def home():
 def your_url():
     if request.method == 'POST':
         urls = {} # empty dictionary
-        urls[request.form['code']] = {'url': request.form['url']} # key value pair of code and url passed through the POST request
+
+        if os.path.exists('urls.json'):
+            with open('urls.json') as url_file:
+                urls = json.load(url_file) # load the json file into the dictionary
+
+        if request.form['code'] in urls.keys():
+            flash('This shortname is already in use. Please choose a different shortname.')
+            return redirect(url_for('home'))
+        
+        if 'url' in request.form.keys(): # Is there something called a url in the form dictionary
+            urls[request.form['code']] = {'url': request.form['url']} # key value pair of code and url passed through the POST request
+        else:
+            f = request.files['file']
+            # full_name = request.form['code'] + secure_filename(f.filename)
+            full_name = request.form['code'] + f.filename
+            f.save('C:/Users/Mohsin/Desktop/Github/URL-shortener-FLASK/' + full_name)
+            urls[request.form['code']] = {'file': full_name}
+
+
+
         with open('urls.json', 'w') as url_file: #only proceed if the json file can be opened
             json.dump(urls, url_file) # dump the key-value pair into the json file
-        return render_template('your_url.html', code=request.form['code'])
-        # when working with post requests we use request.form instead of request.args 
+
+        return render_template('your_url.html', code=request.form['code'], url=request.form['url'])
+        # when working with post requests we use request.form instead of request.args
+ 
     else:
         return redirect(url_for('home'))
 
