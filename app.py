@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
 import json
 import os.path
 from werkzeug.utils import secure_filename
@@ -21,31 +21,57 @@ def your_url():
 
         if os.path.exists('urls.json'):
             with open('urls.json') as url_file:
-                urls = json.load(url_file) # load the json file into the dictionary
+                try:
+                    urls = json.load(url_file)
+                except json.JSONDecodeError:
+                    urls = {}  # Initialize as empty dictionary if the file is empty
 
         if request.form['code'] in urls.keys():
             flash('This shortname is already in use. Please choose a different shortname.')
             return redirect(url_for('home'))
         
-        if 'url' in request.form.keys(): # Is there something called a url in the form dictionary
-            urls[request.form['code']] = {'url': request.form['url']} # key value pair of code and url passed through the POST request
-        else:
+        if 'url' in request.form:
+            urls[request.form['code']] = {'url': request.form['url']}
+            with open('urls.json', 'w') as url_file:
+                json.dump(urls, url_file)
+            return render_template('your_url.html', code=request.form['code'], url=request.form['url'])
+
+        elif 'file' in request.files:
             f = request.files['file']
-            # full_name = request.form['code'] + secure_filename(f.filename)
-            full_name = request.form['code'] + f.filename
-            f.save('C:/Users/Mohsin/Desktop/Github/URL-shortener-FLASK/' + full_name)
+            full_name = request.form['code'] + secure_filename(f.filename)
+            f.save('C:/Users/Mohsin/Desktop/Github/URL-shortener-FLASK/static/user_files/' + full_name)
             urls[request.form['code']] = {'file': full_name}
+            with open('urls.json', 'w') as url_file:
+                json.dump(urls, url_file)
+            return render_template('your_url.html', code=request.form['code'], url=full_name)
 
-
-
-        with open('urls.json', 'w') as url_file: #only proceed if the json file can be opened
-            json.dump(urls, url_file) # dump the key-value pair into the json file
-
-        return render_template('your_url.html', code=request.form['code'], url=request.form['url'])
-        # when working with post requests we use request.form instead of request.args
+        else:
+            flash('No URL or file provided.')
+            return redirect(url_for('home'))
  
     else:
         return redirect(url_for('home'))
+    
+@app.route('/<string:code>')
+def redirect_to_url(code):
+    pass
+    if os.path.exists('urls.json'):
+        with open('urls.json') as url_file:
+            try:
+                urls = json.load(url_file)
+                if code in urls.keys():
+                    if 'url' in urls[code].keys():
+                        return redirect(urls[code] ['url'])
+                    else:
+                        return redirect(url_for('static', filename='user_files/' + urls[code] ['file']))
+                else:
+                    flash('Shortname not found.')
+                    return redirect(url_for('home'))
+            except json.JSONDecodeError:
+                flash('Shortname list is empty.')
+                return redirect(url_for('home'))
+    return abort(404)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
