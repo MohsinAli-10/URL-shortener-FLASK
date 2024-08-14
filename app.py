@@ -17,6 +17,10 @@ def home():
 @app.route('/your_url', methods=['GET', 'POST']) 
 def your_url():
     if request.method == 'POST':
+        
+
+        # -------------------------------------------------
+        # Ensure that the urls json file exists, otherwise initialize it as an empty dictionary
         urls = {} # empty dictionary
 
         if os.path.exists('urls.json'):
@@ -25,6 +29,7 @@ def your_url():
                     urls = json.load(url_file)
                 except json.JSONDecodeError:
                     urls = {}  # Initialize as empty dictionary if the file is empty
+        # ---------------------------------------------------
 
         if request.form['code'] in urls.keys():
             flash('This shortname is already in use. Please choose a different shortname.')
@@ -54,7 +59,6 @@ def your_url():
     
 @app.route('/<string:code>')
 def redirect_to_url(code):
-    pass
     if os.path.exists('urls.json'):
         with open('urls.json') as url_file:
             try:
@@ -65,13 +69,17 @@ def redirect_to_url(code):
                     else:
                         return redirect(url_for('static', filename='user_files/' + urls[code] ['file']))
                 else:
-                    flash('Shortname not found.')
-                    return redirect(url_for('home'))
+                    return abort(404)
+                    # flash('Shortname not found.')
+                    # return redirect(url_for('home'))
             except json.JSONDecodeError:
-                flash('Shortname list is empty.')
+                flash('Shortname list is empty. Please post an entry for the list.')
                 return redirect(url_for('home'))
-    return abort(404)
+                # return abort(404)
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
