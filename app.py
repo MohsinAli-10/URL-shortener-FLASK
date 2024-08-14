@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, abort, session
 import json
 import os.path
 from werkzeug.utils import secure_filename
@@ -11,7 +11,7 @@ app.secret_key = 'jkdshfjkasdfhsadkmad;lsam' #allows information to be securely 
 # a route tells the app what to serve when a particular address is visited
 @app.route('/') # '/' is for the base URL
 def home():
-    return render_template('home.html') # function to return the template
+    return render_template('home.html', codes = session.keys()) # function to return the template
 # This templating functionality is derived from jinja (template engine)
 
 @app.route('/your_url', methods=['GET', 'POST']) 
@@ -39,6 +39,7 @@ def your_url():
             urls[request.form['code']] = {'url': request.form['url']}
             with open('urls.json', 'w') as url_file:
                 json.dump(urls, url_file)
+                session[request.form['code']] = True
             return render_template('your_url.html', code=request.form['code'], url=request.form['url'])
 
         elif 'file' in request.files:
@@ -48,6 +49,7 @@ def your_url():
             urls[request.form['code']] = {'file': full_name}
             with open('urls.json', 'w') as url_file:
                 json.dump(urls, url_file)
+                session[request.form['code']] = True
             return render_template('your_url.html', code=request.form['code'], url=full_name)
 
         else:
