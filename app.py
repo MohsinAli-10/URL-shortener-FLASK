@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, abort, session
+from flask import Flask, render_template, request, redirect, url_for, flash, abort, session, jsonify
 import json
 import os.path
 from werkzeug.utils import secure_filename
@@ -83,8 +83,27 @@ def redirect_to_url(code):
 def page_not_found(error):
     return render_template('page_not_found.html'), 404
 
+@app.route('/Sapi')
+def session_api():
+    return jsonify(list(session.keys()))
+
+@app.route('/Tapi')
+def total_api():
+    urls = {}
+    if os.path.exists('urls.json'):
+        with open('urls.json') as url_file:
+            try:
+                urls = json.load(url_file)
+            except json.JSONDecodeError:
+                urls = {}
+    result = []
+    for key, value in urls.items():
+        result.append(f"code: {key} -> {value}")
+    return jsonify(result)
+
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 # we pass the url path to the route function
 # the function name doesn't have to match the name of the route

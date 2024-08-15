@@ -1,7 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}URL for "{{ code }}"{% endblock %}
+
+{% block main %}
 <h1>Your URL</h1>
 <h2>URL: {{url}}</h2>
 <h2>Code: {{ code }}</h2>
 <a href="{{ url_for('home')}}">Go to Home page</a>
-<!-- <form action="/" method="get">
-    <input type="submit" value="Go back to homepage">
-</form> -->
+{% endblock %}
