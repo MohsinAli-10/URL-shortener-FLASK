@@ -1,13 +1,52 @@
-<!-- <h1>THIS IS BASE</h1> -->
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>{% block title %}{% endblock %}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1c1c;
+            color: #d3d3d3;
+        }
+        h1, h2 {
+            color: #bd00f7; /* Purple color */
+        }
+        .btn-custom {
+            background-color: #f700a0; /* Purple color */
+            color: #ffffff;
+        }
+        .btn-custom:hover {
+            background-color: #c760fa; /* Lighter purple */
+            color: #fff;
+        }
+        input[type="url"], input[type="text"], input[type="file"] {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #800080;
+        }
+        label {
+            color: #bd00f7;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .api-btn {
+            background-color: #f700a0;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .api-btn:hover {
+            background-color: #c760fa;
+            color: white;
+        }
+    </style>
 </head>
-
-{% for message in get_flashed_messages() %} 
-<h2>{{ message }}</h2>
-{% endfor %}
-
-
-{% block main %}
-{% endblock %}
+<body>
+    <div class="container">
+        {% block main %}{% endblock %}
+    </div>
+</body>
+</html>

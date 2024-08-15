@@ -3,10 +3,14 @@
 {% block title %}Page Not Found{% endblock %}
 
 {% block main %}
-<h1>Page Not Found</h1>
-<!-- <p>We couldn't fin what you're looking for. Please visit our homepage: <a href="/">Home</a></p> -->
-
-<p>
-    We couldn't find what you're looking for. Please visit our homepage: <a href="{{ url_for('home')}}">Home</a>
-</p>
+<div class="container text-center py-5">
+    <h1 class="display-2" style="color: #ff4757;">Oops!</h1>
+    <h2 class="mb-4" style="color: #fa5ee0;">404 - Page Not Found</h2>
+    <p class="lead mb-5" style="color: #ffa6fe;">
+        We couldn't find what you're looking for. The page might have been moved, deleted, or does not exist.
+    </p>
+    <a href="{{ url_for('home')}}" class="btn btn-lg btn-primary" style="background-color: #ff0099; border-color: #ff0099;">
+        Back to Homepage
+    </a>
+</div>
 {% endblock %}
