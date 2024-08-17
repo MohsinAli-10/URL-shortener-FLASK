@@ -1,72 +1,48 @@
 {% extends 'base.html' %}
 
+{% block title %}URL Shortener{% endblock %}
+
 {% block main %}
-<div class="container-fluid py-3">
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2c2c2c;">
-        <a class="navbar-brand" href="{{ url_for('home')}}">Home</a>
-        <div class="ml-auto">
-            <a href="{{ url_for('total_api') }}" class="btn api-btn mr-2">Total API</a>
-            <a href="{{ url_for('session_api') }}" class="btn api-btn">Session API</a>
-        </div>
-    </nav>
-</div>
 
-<div class="container-fluid py-5">
-    <div class="row">
-        <!-- URL Shortener Container -->
-        <div class="col-md-6">
-            <div class="p-4" style="background-color: #2c2c2c; border-radius: 10px;">
-                <h2 class="text-center">URL Shortener</h2>
-                <form action="your_url" method="post">
-                    <div class="form-group">
-                        <label for="url">Website URL:</label>
-                        <input type="url" class="form-control" name="url" value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="code">Shortened Name:</label>
-                        <input type="text" class="form-control" name="code" value="" required>
-                    </div>
-                    <button type="submit" class="btn btn-custom btn-block">Shorten the URL</button>
-                </form>
-            </div>
-        </div>
+<h1>URL shortener</h1>
 
-        <!-- File Encoder Container -->
-        <div class="col-md-6">
-            <div class="p-4" style="background-color: #2c2c2c; border-radius: 10px;">
-                <h2 class="text-center">File Encoder</h2>
-                <form action="your_url" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="file">File:</label>
-                        <input type="file" class="form-control" name="file" value="" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="code">Shortened Name:</label>
-                        <input type="text" class="form-control" name="code" value="" required>
-                    </div>
-                    <button type="submit" class="btn btn-custom btn-block">Encode the File</button>
-                </form>
-            </div>
-        </div>
-    </div>
+<form action="your_url" method="post">
+    <!-- 1. what is full length url the user wants
+    2. what code should be associated with the url
+    3. button to submit the form 
+    action specifies the path where the form will submit the data-->
+    <label for="url">Website URL: </label>
+    <input type="url" name="url" value="" required>
+    <br>
+    <label for="code">Shortened Name: </label>
+    <input type="text" name="code" value="" required>
+    <br>
+    <br>
+    <input type="submit" value="Shorten the URL">
+</form>
 
-    <!-- Codes Submitted Container -->
-    {% if codes %}
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="p-4" style="background-color: #2c2c2c; border-radius: 10px;">
-                <h2 class="text-center">Codes You Have Created</h2>
-                <ul class="list-group">
-                    {% for code in codes %}
-                    <a href="{{ url_for('redirect_to_url', code=code) }}" class="list-group-item list-group-item-action bg-dark text-light" style="border-radius: 5px; margin-bottom: 5px;">
-                        {{ code }}
-                    </a>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-</div>
+<form action="your_url" method="post" enctype="multipart/form-data">
+    <br>
+    <br>
+    <label for="file">File: </label>
+    <input type="file" name="file" value="" required>
+    <br>
+    <label for="code">Shortened Name: </label>
+    <input type="text" name="code" value="" required>
+    <br>
+    <br>
+    <input type="submit" value="Encode the file">
+</form>
+
+{% if codes %}
+<h2>Codes you have created: </h2>
+<ul>
+    {% for code in codes %}
+    <a href="{{ url_for('redirect_to_url', code=code) }}">
+        <li>{{ code }}</li>
+    </a>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
