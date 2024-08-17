@@ -22,8 +22,9 @@ def your_url():
         # Ensure that the urls json file exists, otherwise initialize it as an empty dictionary
         urls = {} # empty dictionary
 
-        if os.path.exists('urls.json'):
-            with open('urls.json') as url_file:
+        file_path = os.path.join(bp.root_path, 'urls.json')
+        if os.path.exists(file_path):
+            with open(file_path) as url_file:
                 try:
                     urls = json.load(url_file)
                 except json.JSONDecodeError:
@@ -36,7 +37,7 @@ def your_url():
         
         if 'url' in request.form:
             urls[request.form['code']] = {'url': request.form['url']}
-            with open('urls.json', 'w') as url_file:
+            with open(file_path, 'w') as url_file:
                 json.dump(urls, url_file)
                 session[request.form['code']] = True
             return render_template('your_url.html', code=request.form['code'], url=request.form['url'])
@@ -46,7 +47,7 @@ def your_url():
             full_name = request.form['code'] + secure_filename(f.filename)
             f.save('C:/Users/Mohsin/Desktop/Github/URL-shortener-FLASK/urlshort/static/user_files/' + full_name)
             urls[request.form['code']] = {'file': full_name}
-            with open('urls.json', 'w') as url_file:
+            with open(file_path, 'w') as url_file:
                 json.dump(urls, url_file)
                 session[request.form['code']] = True
             return render_template('your_url.html', code=request.form['code'], url=full_name)
@@ -60,8 +61,9 @@ def your_url():
     
 @bp.route('/<string:code>')
 def redirect_to_url(code):
-    if os.path.exists('urls.json'):
-        with open('urls.json') as url_file:
+    file_path = os.path.join(bp.root_path, 'urls.json')
+    if os.path.exists(file_path):
+        with open(file_path) as url_file:
             try:
                 urls = json.load(url_file)
                 if code in urls.keys():
@@ -88,9 +90,10 @@ def session_api():
 
 @bp.route('/Tapi')
 def total_api():
+    file_path = os.path.join(bp.root_path, 'urls.json')
     urls = {}
-    if os.path.exists('urls.json'):
-        with open('urls.json') as url_file:
+    if os.path.exists(file_path):
+        with open(file_path) as url_file:
             try:
                 urls = json.load(url_file)
             except json.JSONDecodeError:
@@ -100,8 +103,8 @@ def total_api():
         result.append(f"code: {key} -> {value}")
     return jsonify(result)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 
 # we pass the url path to the route function
