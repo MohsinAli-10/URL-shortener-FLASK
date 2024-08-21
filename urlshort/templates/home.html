@@ -3,42 +3,46 @@
 {% block title %}URL Shortener{% endblock %}
 
 {% block main %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Shorten URL</h2>
+                <form action="your_url" method="post" class="form-group">
+                    <label for="url">Website URL: </label>
+                    <input type="url" name="url" class="form-control mb-2" required>
+                    <label for="code">Shortened Name: </label>
+                    <input type="text" name="code" class="form-control mb-2" required>
+                    <input type="submit" class="btn btn-custom mt-2" value="Shorten the URL">
+                </form>
+            </div>
+        </div>
+    </div>
 
-<h1>URL shortener</h1>
-
-<form action="your_url" method="post">
-    <label for="url">Website URL: </label>
-    <input type="url" name="url" value="" required>
-    <br>
-    <label for="code">Shortened Name: </label>
-    <input type="text" name="code" value="" required>
-    <br>
-    <br>
-    <input type="submit" value="Shorten the URL">
-</form>
-
-<form action="your_url" method="post" enctype="multipart/form-data">
-    <br>
-    <br>
-    <label for="file">File: </label>
-    <input type="file" name="file" value="" required>
-    <br>
-    <label for="code">Shortened Name: </label>
-    <input type="text" name="code" value="" required>
-    <br>
-    <br>
-    <input type="submit" value="Encode the file">
-</form>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">Encode File</h2>
+                <form action="your_url" method="post" enctype="multipart/form-data" class="form-group">
+                    <label for="file">File: </label>
+                    <input type="file" name="file" class="form-control mb-2" required>
+                    <label for="code">Shortened Name: </label>
+                    <input type="text" name="code" class="form-control mb-2" required>
+                    <input type="submit" class="btn btn-custom mt-2" value="Encode the file">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% if codes %}
 <h2>Codes you have created: </h2>
-<ul>
+<div class="d-flex flex-column align-items-start">
     {% for code in codes %}
-    <a href="{{ url_for('urlshort.redirect_to_url', code=code) }}">
-        <li>{{ code }}</li>
+    <a href="{{ url_for('urlshort.redirect_to_url', code=code) }}" class="btn btn-custom mb-2">
+        {{ code }}
     </a>
     {% endfor %}
-</ul>
+</div>
 {% endif %}
-
 {% endblock %}

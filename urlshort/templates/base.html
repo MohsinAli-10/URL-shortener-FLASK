@@ -1,13 +1,74 @@
-<!-- <h1>THIS IS BASE</h1> -->
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #f0f0f0, #d0d0d0);
+            background-image: url('https://www.transparenttextures.com/patterns/snow.png'); /* Add texture */
+            color: #000;
+        }
+        h1, h2 {
+            font-weight: bold;
+        }
+        .btn-custom {
+            background-color: #343a40; /* Dark grey background */
+            color: #fff; /* White text */
+            border: none;
+        }
+        .btn-custom:hover {
+            background-color: #495057; /* Darker grey on hover */
+            color: #fff; /* White text on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Glowing effect */
+        }
+        .container {
+            padding-top: 20px;
+        }
+        .navbar-custom {
+            background-color: #343a40; /* Dark grey background for navbar */
+        }
+        .navbar-custom .navbar-brand {
+            color: #fff; /* White text */
+            font-size: 2rem; /* Larger font size */
+            font-weight: bold; /* Bold text */
+            text-align: left; /* Center align text */
+            flex: 1; /* Allow title to take up available space */
+        }
+        .navbar-custom .nav-link {
+            color: #fff; /* White text */
+        }
+        .navbar-custom .nav-link:hover {
+            color: #d0d0d0; /* Lighter grey on hover */
+        }
+        .navbar-custom .ml-auto {
+            margin-left: auto; /* Push buttons to the far right */
+        }
+    </style>
 </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">URL Shortener</a>
+        <div class="ml-auto">
+            <a class="btn btn-custom mr-2" href="/total_api">TOTAL DB API</a>
+            <a class="btn btn-custom" href="/session_api">SESSION API</a>
+        </div>
+    </nav>
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
 
-{% for message in get_flashed_messages() %} 
-<h2>{{ message }}</h2>
-{% endfor %}
-
-
-{% block main %}
-{% endblock %}
+        {% block main %}
+        {% endblock %}
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

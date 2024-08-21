@@ -3,8 +3,10 @@
 {% block title %}URL for "{{ code }}"{% endblock %}
 
 {% block main %}
-<h1>Your URL</h1>
-<h2>URL: {{url}}</h2>
-<h2>Code: {{ code }}</h2>
-<a href="{{ url_for('urlshort.home')}}">Go to Home page</a>
+<h1 class="text-center">Your URL</h1>
+<h2 class="text-center">URL: {{url}}</h2>
+<h2 class="text-center">Code: {{ code }}</h2>
+<div class="text-center mt-3">
+    <a href="{{ url_for('urlshort.home')}}" class="btn btn-custom">Go to Home page</a>
+</div>
 {% endblock %}
