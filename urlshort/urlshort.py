@@ -16,8 +16,6 @@ def home():
 @bp.route('/your_url', methods=['GET', 'POST']) 
 def your_url():
     if request.method == 'POST':
-        
-
         # -------------------------------------------------
         # Ensure that the urls json file exists, otherwise initialize it as an empty dictionary
         urls = {} # empty dictionary
